@@ -1,30 +1,3 @@
-/* STUDENTS IGNORE THIS FUNCTION
- * All this does is create an initial
- * attendance record if one is not found
- * within localStorage.
- */
-(function() {
-    if (!localStorage.attendance) {
-        console.log('Creating attendance records...');
-        function getRandom() {
-            return (Math.random() >= 0.5);
-        }
-
-        var nameColumns = $('tbody .name-col'),
-            attendance = {};
-
-        nameColumns.each(function() {
-            var name = this.innerText;
-            attendance[name] = [];
-
-            for (var i = 0; i <= 11; i++) {
-                attendance[name].push(getRandom());
-            }
-        });
-
-        localStorage.attendance = JSON.stringify(attendance);
-    }
-}());
 
 let model = {
     students: [
@@ -129,7 +102,32 @@ let octopus = {
         localStorage.setItem('attendance', JSON.stringify(attendance));
     },
 
+    initStorage: function() {
+                console.log('Creating attendance records...');
+                function getRandom() {
+                    return (Math.random() >= 0.5);
+                }
+        
+                const nameColumns = model.students;
+                let attendance = {};
+        
+                nameColumns.forEach(function(student) {
+                    const name = student.name;
+                    attendance[name] = [];
+        
+                    for (let i = 0; i <= 11; i++) {
+                        attendance[name].push(getRandom());
+                    }
+                });
+        
+                localStorage.attendance = JSON.stringify(attendance);
+                console.log(attendance);
+    },
+
     init: function() {
+        if (!localStorage.getItem('attendance')) {
+            octopus.initStorage();
+        }
         octopus.populateDays();
         view.init();
     },
